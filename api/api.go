@@ -152,6 +152,7 @@ func getIndex(response http.ResponseWriter, request *http.Request) {
 			}
 		}
 	}
+	http.Error(response, err.Error(), http.StatusBadRequest)
 }
 
 func getPassword(response http.ResponseWriter, request *http.Request) {
@@ -183,6 +184,7 @@ func getPassword(response http.ResponseWriter, request *http.Request) {
 			}
 		}
 	}
+	http.Error(response, err.Error(), http.StatusBadRequest)
 }
 
 
@@ -259,4 +261,5 @@ func deleteUser(response http.ResponseWriter, request *http.Request) {
 		}
 		
 	}
+	http.Error(response, err.Error(), http.StatusBadRequest)
 }
