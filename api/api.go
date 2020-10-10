@@ -3,13 +3,14 @@ package api
 import (
 	"net/http"
 	"github.com/gorilla/mux"
+	"fmt"
 )
 
 
 //Declare a global array of Credentials
 //See credentials.go
 
-/*YOUR CODE HERE*/
+var credents []Credentials = []Credentials{}
 
 
 // RegisterRoutes is this
@@ -45,7 +46,13 @@ func getCookie(response http.ResponseWriter, request *http.Request) {
 		If there is no such cookie, write an empty string to the response
 	*/
 
-	/*YOUR CODE HERE*/
+	cookie, err := request.Cookie("access_token")
+	if err != nil {
+		fmt.Fprintln(response, "")
+	} else {
+		accessToken := cookie.Value
+		fmt.Fprintln(response, accessToken)
+	}
 }
 
 func getQuery(response http.ResponseWriter, request *http.Request) {
