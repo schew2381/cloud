@@ -151,9 +151,14 @@ func getIndex(response http.ResponseWriter, request *http.Request) {
 	*/
 	cre := Credentials{}
 	err := json.NewDecoder(request.Body).Decode(&cre)
-	if err != nil || cre.Username == ""{
+	if err != nil {
 		http.Error(response, err.Error(), http.StatusBadRequest)
 		return
+
+	} else if cre.Username == ""{
+		http.Error(response, errors.New("bad credentials").Error(), http.StatusBadRequest)
+		return
+
 	} else {
 		for i := 0; i < len(credents); i++ {
 			if (credents[i].Username == cre.Username) {
