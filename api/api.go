@@ -67,6 +67,7 @@ func getQuery(response http.ResponseWriter, request *http.Request) {
 
 	userID := request.URL.Query().Get("userID")
 	fmt.Fprintf(response, userID)
+	return
 }
 
 func getJSON(response http.ResponseWriter, request *http.Request) {
@@ -90,7 +91,7 @@ func getJSON(response http.ResponseWriter, request *http.Request) {
 	err := json.NewDecoder(request.Body).Decode(&cre)
 	if err != nil || cre.Username == "" || cre.Password == "" {
 		http.Error(response, err.Error(), http.StatusBadRequest)
-	} else {	
+	} else {
 		fmt.Fprintf(response, cre.Username + "\n")
 		fmt.Fprintf(response, cre.Password)
 	}
@@ -120,6 +121,7 @@ func signup(response http.ResponseWriter, request *http.Request) {
 		http.Error(response, err.Error(), http.StatusBadRequest)
 	} else {
 		credents = append(credents, cre)
+		response.WriteHeader(201)
 	}
 	return
 }
@@ -146,6 +148,7 @@ func getIndex(response http.ResponseWriter, request *http.Request) {
 	err := json.NewDecoder(request.Body).Decode(&cre)
 	if err != nil || cre.Username == ""{
 		http.Error(response, err.Error(), http.StatusBadRequest)
+		return
 	} else {
 		for i := 0; i < len(credents); i++ {
 			if (credents[i].Username == cre.Username) {
@@ -179,6 +182,7 @@ func getPassword(response http.ResponseWriter, request *http.Request) {
 	err := json.NewDecoder(request.Body).Decode(&cre)
 	if err != nil || cre.Username == ""{
 		http.Error(response, err.Error(), http.StatusBadRequest)
+		return
 	} else {
 		for _, element := range credents {
 			if (element.Username == cre.Username) {
@@ -217,6 +221,7 @@ func updatePassword(response http.ResponseWriter, request *http.Request) {
 	err := json.NewDecoder(request.Body).Decode(&cre)
 	if err != nil || cre.Username == "" || cre.Password == "" {
 		http.Error(response, err.Error(), http.StatusBadRequest)
+		return
 	} else {
 		for _, element := range credents {
 			if (element.Username == cre.Username) {
@@ -225,6 +230,7 @@ func updatePassword(response http.ResponseWriter, request *http.Request) {
 			}
 		}
 	}
+	http.Error(response, err.Error(), http.StatusBadRequest)
 	return
 }
 
@@ -257,6 +263,7 @@ func deleteUser(response http.ResponseWriter, request *http.Request) {
 	err := json.NewDecoder(request.Body).Decode(&cre)
 	if err != nil || cre.Username == "" || cre.Password == "" {
 		http.Error(response, err.Error(), http.StatusBadRequest)
+		return
 	} else {
 		for index, element := range credents {
 			if element.Username == cre.Username && element.Password == cre.Password {
@@ -267,5 +274,5 @@ func deleteUser(response http.ResponseWriter, request *http.Request) {
 		
 	}
 	http.Error(response, err.Error(), http.StatusBadRequest)
-	return
+	return 
 }
