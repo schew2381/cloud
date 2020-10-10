@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"github.com/gorilla/mux"
 	"fmt"
+	"encoding/json"
+	"strconv"
 )
 
 
@@ -62,7 +64,8 @@ func getQuery(response http.ResponseWriter, request *http.Request) {
 		If there is no such query parameter, write an empty string to the response
 	*/
 
-	/*YOUR CODE HERE*/
+	userID := request.URL.Query().Get("userID")
+	fmt.Fprintln(response, userID)
 }
 
 func getJSON(response http.ResponseWriter, request *http.Request) {
@@ -82,8 +85,14 @@ func getJSON(response http.ResponseWriter, request *http.Request) {
 		Make sure to error check! If there are any errors, call http.Error(), and pass in a "http.StatusBadRequest" What kind of errors can we expect here?
 	*/
 
-	/*YOUR CODE HERE*/
-	
+	cre := Credentials{}
+	err := json.NewDecoder(request.Body).Decode(&cre)
+	if err != nil || cre.Username == "" || cre.Password == ""{
+		http.Error(response, err.Error(), http.StatusBadRequest)
+	} else {
+		fmt.Fprintf(response, cre.Username + "\n")
+		fmt.Fprintf(response, cre.Password)
+	}
 }
 
 func signup(response http.ResponseWriter, request *http.Request) {
@@ -103,7 +112,13 @@ func signup(response http.ResponseWriter, request *http.Request) {
 		Make sure to error check! If there are any errors, call http.Error(), and pass in a "http.StatusBadRequest" What kind of errors can we expect here?
 	*/
 
-	/*YOUR CODE HERE*/
+	cre := Credentials{}
+	err := json.NewDecoder(request.Body).Decode(&cre)
+	if err != nil || cre.Username == "" || cre.Password == ""{
+		http.Error(response, err.Error(), http.StatusBadRequest)
+	} else {
+		credents = append(credents, cre)
+	}
 }
 
 func getIndex(response http.ResponseWriter, request *http.Request) {
@@ -124,8 +139,17 @@ func getIndex(response http.ResponseWriter, request *http.Request) {
 
 		Make sure to error check! If there are any errors, call http.Error(), and pass in a "http.StatusBadRequest" What kind of errors can we expect here?
 	*/
-
-	/*YOUR CODE HERE*/
+	cre := Credentials{}
+	err := json.NewDecoder(request.Body).Decode(&cre)
+	if err != nil || cre.Username == ""{
+		http.Error(response, err.Error(), http.StatusBadRequest)
+	} else {
+		for i := 0; i < len(credents); i++ {
+			if (credents[i].Username == cre.Username) {
+				fmt.Fprintln(response, strconv.Itoa(i))
+			}
+		}
+	}
 }
 
 func getPassword(response http.ResponseWriter, request *http.Request) {
@@ -145,7 +169,17 @@ func getPassword(response http.ResponseWriter, request *http.Request) {
 		Make sure to error check! If there are any errors, call http.Error(), and pass in a "http.StatusBadRequest" What kind of errors can we expect here?
 	*/
 
-	/*YOUR CODE HERE*/
+	cre := Credentials{}
+	err := json.NewDecoder(request.Body).Decode(&cre)
+	if err != nil || cre.Username == ""{
+		http.Error(response, err.Error(), http.StatusBadRequest)
+	} else {
+		for _, element := range credents {
+			if (element.Username == cre.Username) {
+				fmt.Fprintln(response, element.Password)
+			}
+		}
+	}
 }
 
 
@@ -170,7 +204,21 @@ func updatePassword(response http.ResponseWriter, request *http.Request) {
 		Make sure to error check! If there are any errors, call http.Error(), and pass in a "http.StatusBadRequest" What kind of errors can we expect here?
 	*/
 
-	/*YOUR CODE HERE*/
+	cre := Credentials{}
+	err := json.NewDecoder(request.Body).Decode(&cre)
+	if err != nil || cre.Username == "" || cre.Password == "" {
+		http.Error(response, err.Error(), http.StatusBadRequest)
+	} else {
+		for _, element := range credents {
+			if (element.Username == cre.Username) {
+				element.Password = cre.Password
+			}
+		}
+	}
+}
+
+func removeIndex(lst []Credentials, index int) []Credentials {
+	return append(lst[:index], lst[index + 1:]...)
 }
 
 func deleteUser(response http.ResponseWriter, request *http.Request) {
@@ -194,6 +242,17 @@ func deleteUser(response http.ResponseWriter, request *http.Request) {
 
 		Make sure to error check! If there are any errors, call http.Error(), and pass in a "http.StatusBadRequest" What kind of errors can we expect here?
 	*/
-
-	/*YOUR CODE HERE*/
+	cre := Credentials{}
+	err := json.NewDecoder(request.Body).Decode(&cre)
+	if err != nil || cre.Username == "" || cre.Password == "" {
+		http.Error(response, err.Error(), http.StatusBadRequest)
+	} else {
+		for index, element := range credents {
+			if element.Username == cre.Username && element.Password == cre.Password {
+				credents = removeIndex(credents, index)
+				return
+			}
+		}
+		
+	}
 }
