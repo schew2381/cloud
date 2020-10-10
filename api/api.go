@@ -88,12 +88,13 @@ func getJSON(response http.ResponseWriter, request *http.Request) {
 
 	cre := Credentials{}
 	err := json.NewDecoder(request.Body).Decode(&cre)
-	if err != nil || cre.Username == "" || cre.Password == ""{
+	if err != nil || cre.Username == "" || cre.Password == "" {
 		http.Error(response, err.Error(), http.StatusBadRequest)
-	} else {
+	} else {	
 		fmt.Fprintf(response, cre.Username + "\n")
 		fmt.Fprintf(response, cre.Password)
 	}
+	return
 }
 
 func signup(response http.ResponseWriter, request *http.Request) {
@@ -120,6 +121,7 @@ func signup(response http.ResponseWriter, request *http.Request) {
 	} else {
 		credents = append(credents, cre)
 	}
+	return
 }
 
 func getIndex(response http.ResponseWriter, request *http.Request) {
@@ -153,6 +155,7 @@ func getIndex(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 	http.Error(response, err.Error(), http.StatusBadRequest)
+	return
 }
 
 func getPassword(response http.ResponseWriter, request *http.Request) {
@@ -185,6 +188,7 @@ func getPassword(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 	http.Error(response, err.Error(), http.StatusBadRequest)
+	return
 }
 
 
@@ -221,6 +225,7 @@ func updatePassword(response http.ResponseWriter, request *http.Request) {
 			}
 		}
 	}
+	return
 }
 
 func removeIndex(lst []Credentials, index int) []Credentials {
@@ -262,4 +267,5 @@ func deleteUser(response http.ResponseWriter, request *http.Request) {
 		
 	}
 	http.Error(response, err.Error(), http.StatusBadRequest)
+	return
 }
