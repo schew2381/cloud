@@ -244,9 +244,9 @@ func updatePassword(response http.ResponseWriter, request *http.Request) {
 		return
 
 	} else {
-		for _, element := range credents {
+		for index, element := range credents {
 			if (element.Username == cre.Username) {
-				element.Password = cre.Password
+				credents[index].Password = cre.Password
 				return
 			}
 		}
