@@ -53,7 +53,7 @@ func getCookie(response http.ResponseWriter, request *http.Request) {
 		fmt.Fprintf(response, "")
 	} else {
 		accessToken := cookie.Value
-		fmt.Fprintln(response, accessToken)
+		fmt.Fprintf(response, accessToken)
 	}
 }
 
@@ -146,7 +146,7 @@ func getIndex(response http.ResponseWriter, request *http.Request) {
 	} else {
 		for i := 0; i < len(credents); i++ {
 			if (credents[i].Username == cre.Username) {
-				fmt.Fprintln(response, strconv.Itoa(i))
+				fmt.Fprintf(response, strconv.Itoa(i))
 				return
 			}
 		}
