@@ -57,6 +57,7 @@ func getCookie(response http.ResponseWriter, request *http.Request) {
 		accessToken := cookie.Value
 		fmt.Fprintf(response, accessToken)
 	}
+	return
 }
 
 func getQuery(response http.ResponseWriter, request *http.Request) {
@@ -288,7 +289,7 @@ func deleteUser(response http.ResponseWriter, request *http.Request) {
 	} else if cre.Username == "" || cre.Password == "" {
 		http.Error(response, errors.New("bad credentials").Error(), http.StatusBadRequest)
 		return
-		
+
 	} else {
 		for index, element := range credents {
 			if element.Username == cre.Username && element.Password == cre.Password {
