@@ -120,8 +120,10 @@ func signup(response http.ResponseWriter, request *http.Request) {
 
 	cre := Credentials{}
 	err := json.NewDecoder(request.Body).Decode(&cre)
-	if err != nil || cre.Username == "" || cre.Password == ""{
+	if err != nil {
 		http.Error(response, err.Error(), http.StatusBadRequest)
+	} else if cre.Username == "" || cre.Password == ""{
+		http.Error(response, errors.New("bad credentials").Error(), http.StatusBadRequest)
 	} else {
 		credents = append(credents, cre)
 		response.WriteHeader(201)
