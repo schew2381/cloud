@@ -147,6 +147,7 @@ func getIndex(response http.ResponseWriter, request *http.Request) {
 		for i := 0; i < len(credents); i++ {
 			if (credents[i].Username == cre.Username) {
 				fmt.Fprintln(response, strconv.Itoa(i))
+				return
 			}
 		}
 	}
@@ -176,7 +177,8 @@ func getPassword(response http.ResponseWriter, request *http.Request) {
 	} else {
 		for _, element := range credents {
 			if (element.Username == cre.Username) {
-				fmt.Fprintln(response, element.Password)
+				fmt.Fprintf(response, element.Password)
+				return
 			}
 		}
 	}
@@ -212,6 +214,7 @@ func updatePassword(response http.ResponseWriter, request *http.Request) {
 		for _, element := range credents {
 			if (element.Username == cre.Username) {
 				element.Password = cre.Password
+				return
 			}
 		}
 	}
